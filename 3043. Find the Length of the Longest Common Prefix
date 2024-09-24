@@ -1,0 +1,48 @@
+class Solution {
+public:
+    struct trienode{
+        trienode* child[10];
+        trienode(){
+            for(int i=0;i<10;i++){
+                child[i]=NULL;
+            }
+        }
+    };
+    void insert(string &temp, trienode* curr){
+        int idx;
+        for(int i=0;i<temp.length();i++){
+            idx=temp[i]-'0';
+            if(curr->child[idx]==NULL){
+                curr->child[idx]=new trienode();
+            }
+            curr=curr->child[idx];
+        }
+    }
+    int prefixMatch(string &s, trienode* curr){
+        int idx;
+        int cnt=0;
+        for(int i=0;i<s.length();i++){
+            idx=s[i]-'0';
+            if(!curr->child[idx])
+                break;
+            curr=curr->child[idx];
+            cnt++;
+        }
+        return cnt;
+    }
+    int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
+        trienode* root=new trienode();
+        string temp;
+        for(auto it: arr1){
+            temp=to_string(it);
+            insert(temp,root);
+        }
+        int maxi=0;
+        for(auto it:arr2){
+            temp=to_string(it);
+            int len=prefixMatch(temp,root);
+            maxi=max(maxi,len);
+        }
+        return maxi;
+    }
+};
