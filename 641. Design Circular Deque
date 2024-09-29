@@ -1,59 +1,112 @@
 class MyCircularDeque {
-private:
-    deque<int>dq;
-    int size;
-
 public:
-    MyCircularDeque(int k) {
-        dq=deque<int>();
-        size=k;
-    }
-    
-    bool insertFront(int value) {
-        if(dq.size()<size){
-            dq.push_front(value);
-            return true;
+    struct node {
+        int val;
+        node* next;
+        node* prev;
+        node(int val) {
+            this->val = val;
+            next = prev = NULL;
         }
-        return false;
+    };
+    node* head;
+    node* tail;
+    int listSize, maxSize;
+    MyCircularDeque(int k) {
+        maxSize = k;
+        listSize = 0;
+        head = tail = NULL;
+    }
 
+    bool insertFront(int value) {
+        if (listSize == maxSize)
+            return false;
+        node* newNode = new node(value);
+        if (!head) {
+            head = tail = newNode;
+            head->next = head;
+            tail->prev = head;
+        } else {
+            newNode->next = head;
+            head->prev = newNode;
+            newNode->prev = tail;
+            tail->next = newNode;
+            head = newNode;
+        }
+        listSize++;
+        return true;
     }
-    
+
     bool insertLast(int value) {
-        if(dq.size()<size){
-            dq.push_back(value);
-            return true;
-        } 
-        return false;
+        if (listSize == maxSize)
+            return false;
+        node* newNode = new node(value);
+        if (!head) {
+            head = tail = newNode;
+            head->next = head;
+            tail->prev = head;
+        }
+        else{
+            tail->next=newNode;
+            newNode->prev=tail;
+            newNode->next=head;
+            head->prev=newNode;
+            tail=newNode;
+        }
+        listSize++;
+        return true;
     }
-    
+
     bool deleteFront() {
-        if(dq.empty()) return false;
-        dq.pop_front();
+        if(listSize==0) return false;
+        if(listSize==1){
+            delete head;
+            head=tail=NULL;
+        }
+        else{
+            node* curr=head;
+            head=head->next;
+            head->prev=tail;
+            tail->next=head;
+            delete curr;
+        }
+        listSize--;
         return true;
     }
-    
+
     bool deleteLast() {
-        if(dq.empty()) return false;
-        dq.pop_back();
+        if(listSize==0) return false;
+        if(listSize==1){
+            delete head;
+            head=tail=NULL;
+        }
+        else{
+            node* curr=tail;
+            tail=tail->prev;
+            tail->next=head;
+            head->prev=tail;
+            delete curr;
+        }
+         listSize--;
         return true;
     }
-    
+
     int getFront() {
-        if(dq.empty()) return -1;
-        return dq.front();
+        if(listSize==0) return -1;
+        return head->val;
     }
-    
+
     int getRear() {
-        if(dq.empty()) return -1;
-        return dq.back();
+        if(listSize==0) return -1;
+        return tail->val;
     }
-    
+
     bool isEmpty() {
-        return dq.empty();
+        return listSize==0;
     }
-    
+
     bool isFull() {
-        return dq.size()==size;
+        return listSize==maxSize;
     }
 };
 
