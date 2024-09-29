@@ -1,0 +1,97 @@
+class AllOne {
+    struct node {
+        int cnt;
+        list<string> str; 
+        node *prev, *next;
+        node(int c){
+            cnt=c;
+            prev=next=NULL;
+        }
+    };
+
+    node* head;
+    node* tail;
+    unordered_map<string, node*> mp;
+
+    node* addNode(node* prevNode, int cnt) {
+        node *newNode = new node(cnt);
+        newNode->next = prevNode->next;
+        newNode->prev = prevNode;
+        if (prevNode->next) {
+            prevNode->next->prev = newNode;
+        }
+        prevNode->next = newNode;
+        if (tail == prevNode) {
+            tail = newNode;
+        }
+        return newNode;
+    }
+    void removeNode(node* curr) {
+        curr->prev->next = curr->next;
+        if (curr->next) {
+            curr->next->prev = curr->prev;
+        }
+        if (tail==curr) {
+            tail = curr->prev;
+        }
+        delete curr;
+    }
+
+public:
+    AllOne() {
+        head = new node(0);
+        tail = head;
+    }
+
+    void inc(string key) {
+        if (mp.find(key) == mp.end()) {
+            if (head->next == NULL || head->next->cnt != 1) {
+                addNode(head, 1);
+            }
+            head->next->str.push_front(key);
+            mp[key] = head->next;
+        }
+         else {
+           
+            node* currNode = mp[key];
+            int currCount = currNode->cnt;
+            if (currNode->next == NULL || currNode->next->cnt != currCount + 1) {
+                addNode(currNode, currCount + 1);
+            }
+            currNode->next->str.push_front(key);
+            mp[key] = currNode->next;
+            currNode->str.remove(key);
+            if (currNode->str.empty()) {
+                removeNode(currNode);
+            }
+        }
+    }
+
+    void dec(string key) {
+        node *curr = mp[key];
+        int currCount = curr->cnt;
+        curr->str.remove(key);
+        if (currCount == 1) {
+            mp.erase(key);
+        } 
+        else {
+            
+            if (curr->prev == head || curr->prev->cnt != currCount - 1) {
+                addNode(curr->prev, currCount - 1);
+            }
+            curr->prev->str.push_front(key);
+            mp[key] = curr->prev;
+        }
+        if (curr->str.empty()) {
+            removeNode(curr);
+        }
+    }
+
+    string getMaxKey() {
+        return (tail == head)? "" : tail->str.front();
+    }
+
+    string getMinKey() {
+        return (head->next == NULL) ? "" : head->next->str.front();
+    }
+};
