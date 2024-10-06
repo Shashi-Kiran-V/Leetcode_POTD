@@ -1,0 +1,66 @@
+class Solution {
+public:
+    bool areSentencesSimilar(string s1, string s2) {
+        // USING 4 POINTERS APPROACH //
+
+        /*if(s1.length()<s2.length()) swap(s1,s2);
+        vector<string>v1;
+        vector<string>v2;
+        stringstream ss1(s1);
+        stringstream ss2(s2);
+        string token;
+        while(ss1 >> token){
+            v1.push_back(token);
+        }
+        while(ss2 >> token){
+            v2.push_back(token);
+        }
+        int i=0,k=0;
+        int j=v1.size()-1;
+        int l=v2.size()-1;
+
+        while(i<v1.size() and k<v2.size() and v1[i]==v2[k]){
+            i++;
+            k++;
+        }
+
+        while(l>=k and v1[j]==v2[l]){
+            j--;
+            l--;
+        }
+        if(l<k) return true;
+
+        return false;
+    }*/
+
+    // DEQUE APPROACH //
+
+    if(s1.length()<s2.length()) swap(s1,s2);
+
+    deque<string> dq1;
+    deque<string> dq2;
+
+    stringstream ss1(s1);
+    stringstream ss2(s2);
+    string token;
+
+    while(ss1 >> token){
+        dq1.push_back(token);
+    }
+    while(ss2 >> token){
+        dq2.push_back(token);
+    }
+
+    while(!dq1.empty() and !dq2.empty() and dq1.front()==dq2.front()){
+        dq1.pop_front();
+        dq2.pop_front();
+    }
+    while(!dq1.empty() and !dq2.empty() and dq1.back()==dq2.back()){
+        dq1.pop_back();
+        dq2.pop_back();
+    }
+
+    return dq2.empty();
+    }
+
+};
