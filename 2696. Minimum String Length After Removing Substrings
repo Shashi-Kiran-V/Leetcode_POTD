@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int minLength(string s) {
+       /* stack<char>st;
+
+        for(int i=0;i<s.length();i++){
+            char curr=s[i];
+            if(st.size()==0){
+                st.push(curr);
+                continue;
+            }
+            if(curr=='B' and st.top()=='A'){
+                st.pop();
+            }
+            else if(curr=='D' and st.top()=='C'){
+                st.pop();
+            }
+            else{
+                st.push(curr);
+            }
+
+
+        }
+        return st.size();
+    }*/
+        int n = s.length();
+
+        int i = 0; // Write
+        int j = 1; // Read
+
+        while (j < n) {
+            if (i < 0) {
+                i++;
+                s[i] = s[j];
+            } else if ((s[i] == 'A' && s[j] == 'B') ||
+                       (s[i] == 'C' && s[j] == 'D')) {
+                i--;
+            } else {
+                i++;
+                s[i] = s[j];
+            }
+
+            j++;
+        }
+        return i + 1;
+    }
+};
