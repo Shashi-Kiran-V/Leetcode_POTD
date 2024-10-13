@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        vector<pair<int,int>>lab;
+        for(int i=0;i<nums.size();i++){
+            for(int j:nums[i]){
+                lab.push_back({j,i});
+            }
+        }
+        sort(lab.begin(),lab.end());
+        int min=INT_MAX;
+        int diff=nums.size();
+        int arr[diff];
+        int total=0,j=0;
+        vector<int>ans;
+        memset(arr,0,sizeof(arr));
+        for(int i=0;i<lab.size();i++){
+            arr[lab[i].second]++;
+            if(arr[lab[i].second]==1) total++;
+            if(total==diff){
+                if(lab[i].first-lab[j].first+1<min){
+                    min=lab[i].first-lab[j].first+1;
+                    ans={lab[j].first,lab[i].first};
+                }
+            }
+            if(total==diff){
+                while(total==diff){
+                    if(arr[lab[j].second]>1){
+                        arr[lab[j].second]--;
+                        j++;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                if(lab[i].first-lab[j].first+1<min){
+                    min=lab[i].first-lab[j].first+1;
+                    ans={lab[j].first,lab[i].first};
+                }
+            }
+        }
+        return ans;
+    }
+};
