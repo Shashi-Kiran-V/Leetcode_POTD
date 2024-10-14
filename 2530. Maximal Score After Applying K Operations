@@ -1,0 +1,22 @@
+class Solution {
+public:
+    long long ceil(int num){
+        return (num+2)/3;
+    }
+    long long maxKelements(vector<int>& nums, int k) {
+        priority_queue<int>pq;
+        long long ans=0;
+        for(auto it:nums){
+            pq.push(it);
+        }
+        while(k){
+            int val=pq.top();
+            pq.pop();
+            ans+=val;
+            val=ceil(val);
+            pq.push(val);
+            k--;
+        }
+        return ans;
+    }
+};
