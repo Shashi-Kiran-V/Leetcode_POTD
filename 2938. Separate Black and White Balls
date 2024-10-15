@@ -1,0 +1,15 @@
+class Solution {
+public:
+    long long minimumSteps(string s) {
+        int black=0;
+        long long ans=0;
+
+        for(char c:s){
+            if(c=='1') black++;
+            else{
+                ans+=black;
+            }
+        }
+        return ans;
+    }
+};
