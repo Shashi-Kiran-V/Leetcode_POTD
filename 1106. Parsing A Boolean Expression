@@ -1,0 +1,51 @@
+class Solution {
+public:
+    char solve(vector<char>&v, char op){
+        if(op=='!'){
+            if(v[0]=='t') return 'f';
+            return 't';
+        }
+       else if(op=='&'){
+            for(char &c:v){
+                if(c=='f') return 'f';
+            }
+            return 't';
+        }
+        else{
+            for(char c:v){
+                if(c=='t') return 't';
+            }
+            return 'f';
+        }
+    }
+    bool parseBoolExpr(string s) {
+        int n=s.length();
+
+        stack<char>st;
+
+        for(int i=0;i<n;i++){
+            if(s[i]==',') continue;
+
+            if(s[i]==')'){
+                vector<char>v;
+                while(st.top()!='('){
+                    char ch=st.top();
+                    v.push_back(ch);
+                    st.pop();
+                }
+                st.pop();
+                char op=st.top();
+                st.pop();
+                
+                char res=solve(v,op);
+                
+                st.push(res);
+            }
+            else{
+                st.push(s[i]);
+            }
+        }
+        if(st.top()=='t') return true;
+        return false;
+    }
+};
