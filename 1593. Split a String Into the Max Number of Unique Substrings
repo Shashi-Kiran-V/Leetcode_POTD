@@ -1,0 +1,31 @@
+class Solution {
+public:
+     void solve(string& s, int idx, unordered_set<string>& st, int curr, int& maxi) {
+        if(curr+ (s.length()- idx)<= maxi) { 
+            return;
+        }
+
+        if(idx== s.length()) {
+            maxi = max(maxi, curr);
+        }
+
+        for(int j= idx; j< s.length(); j++) {
+            string sub= s.substr(idx, j-idx+1);
+            if(st.find(sub)== st.end()) {
+                st.insert(sub);
+                solve(s, j+1, st, curr+1, maxi);
+                st.erase(sub);
+            }
+        }
+    }
+
+    int maxUniqueSplit(string s) {
+
+        unordered_set<string> st;
+        int maxi= 0;
+        int curr= 0;
+        solve(s, 0, st, curr, maxi);
+
+        return maxi;
+    }
+};
