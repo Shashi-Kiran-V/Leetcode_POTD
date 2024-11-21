@@ -1,0 +1,56 @@
+class Solution {
+public:
+    void func(int row, int col, vector<vector<int>>&v){
+        for(int i=row-1;i>=0;i--){
+            if(v[i][col]==2 or v[i][col]==3){
+                break;
+            }
+            v[i][col]=1;
+        }
+         for(int i=row+1;i<v.size();i++){
+            if(v[i][col]==2 or v[i][col]==3){
+                break;
+            }
+            v[i][col]=1;
+        }
+        for(int j=col-1;j>=0;j--){
+            if(v[row][j]==2 or v[row][j]==3){
+                break;
+            }
+            v[row][j]=1;
+        }
+        for(int j=col+1;j<v[0].size();j++){
+            if(v[row][j]==2 or v[row][j]==3){
+                break;
+            }
+            v[row][j]=1;
+        }
+    }
+    int countUnguarded(int m, int n, vector<vector<int>>& guards, vector<vector<int>>& walls) {
+       vector<vector<int>>v(m,vector<int>(n,0));
+
+        for(auto it: guards){
+            int i=it[0];
+            int j=it[1];
+            v[i][j]=2;
+        }
+
+        for(auto it: walls){
+            int i=it[0];
+            int j=it[1];
+            v[i][j]=3;
+        }
+        int cnt=0;
+        for(auto it: guards){
+            int i=it[0];
+            int j=it[1];
+            func(i,j,v);
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(v[i][j]==0) cnt++;
+            }
+        }
+        return cnt;
+    }
+};
